@@ -1,0 +1,58 @@
+#define BUTTON_PIN 2 //not going to change 
+#define N_LEDS 4 //size of array
+
+
+int ledPins[N_LEDS] = {4,5, 6, 7}; //integer array
+int buttonPressCounter = 0; // keeps track of button presses and starts at 0
+int lastButtonState = LOW; //unpressed button state
+
+void setup() {
+  pinMode(BUTTON_PIN, INPUT);
+  Serial.begin(9600);
+  for(int k = 0; k < N_LEDS; ++k)
+  pinMode(ledPins[k], OUTPUT);
+}
+
+void loop() {
+  int buttonState = digitalRead(BUTTON_PIN);
+  if(lastButtonState == LOW && buttonState == HIGH){
+    ++buttonPressCounter; //button goes from LOW to HIGH = add 1
+
+      //reset after 4 since there is 4 LEDS
+    if(buttonPressCounter > 4){
+      buttonPressCounter = 0;
+  }
+
+    updateLEDS(buttonPressCounter, ledPins, N_LEDS);
+
+   
+  }
+  lastButtonState = buttonState;
+ 
+
+  Serial.println(buttonPressCounter);
+}
+
+//incementally turns LED on
+void updateLEDS(int ledMode, int pins[], int nPins){
+  for(int k = 0; k < nPins; ++k){
+    if(k < ledMode){
+      digitalWrite(pins[k], HIGH);
+
+    }
+    //turns off LED
+     else{
+      digitalWrite(pins[k], LOW);
+
+
+     }
+  }
+}
+
+  
+
+
+
+
+
+
